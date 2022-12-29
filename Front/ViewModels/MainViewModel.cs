@@ -49,9 +49,9 @@ namespace Front.ViewModels
                         .PostAsJsonAsync("api/Users/login", loginModel)
                         .ContinueWith((postTask) => postTask.Result.EnsureSuccessStatusCode());
                 }
-                catch
+                catch (Exception e)
                 {
-                    MessageBox.Show(response.StatusCode.ToString(), "Внимание!");
+                    MessageBox.Show(e.Message, "Внимание!");
                     return;
                 }
 
@@ -72,12 +72,14 @@ namespace Front.ViewModels
             {
                 if (!IsValidEmail(Email))
                 {
-                    throw new Exception("Некорректно введён Email.");
+                    MessageBox.Show("Некорректно введён Email", "Внимание!");
+                    return;
                 }
 
                 if (!IsValidPassword(Password))
                 {
-                    throw new Exception("Пароль не удовлетворяет требованиям.");
+                    MessageBox.Show("Пароль не удовлетворяет требованиям", "Внимание!");
+                    return;
                 }
 
                 var loginModel = new LoginModel()
@@ -86,9 +88,19 @@ namespace Front.ViewModels
                     Password = Password!
                 };
 
-                var response = await httpClient
-                    .PostAsJsonAsync("api/Users/register", loginModel)
-                    .ContinueWith((postTask) => postTask.Result.EnsureSuccessStatusCode());
+                var response = new HttpResponseMessage();
+
+                try
+                {
+                    response = await httpClient
+                        .PostAsJsonAsync("api/Users/login", loginModel)
+                        .ContinueWith((postTask) => postTask.Result.EnsureSuccessStatusCode());
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message, "Внимание!");
+                    return;
+                }
 
                 var result = await response.Content.ReadAsStringAsync();
 
@@ -97,8 +109,8 @@ namespace Front.ViewModels
                 SetAccessToken(user.AccessToken);
 
                 new MainAppView(user)
-                    { WindowStartupLocation = WindowStartupLocation.CenterScreen }.Show();
-                
+                { WindowStartupLocation = WindowStartupLocation.CenterScreen }.Show();
+
                 view.Close();
             });
             Register.ThrownExceptions.Subscribe(e => MessageBox.Show(e.Message));
