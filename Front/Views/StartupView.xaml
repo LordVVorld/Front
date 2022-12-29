@@ -36,7 +36,7 @@
             <Label Content="Email" FontSize="24" HorizontalContentAlignment="Left"/>
             <TextBox x:Name="EmailInputBox" FontSize="24" materialDesign:HintAssist.Hint="Enter email address here" BorderThickness="2" BorderBrush="Gray"/>
             <Label Content="Password" FontSize="24" HorizontalContentAlignment="Left" Margin="0,20,0,0"/>
-            <PasswordBox x:Name="PasswordInputBox" PasswordChar="*" FontSize="24" materialDesign:HintAssist.Hint="Enter password here" BorderThickness="2" BorderBrush="Gray"/>
+            <TextBox x:Name="PasswordInputBox" FontSize="24" materialDesign:HintAssist.Hint="Enter password here" BorderThickness="2" BorderBrush="Gray"/>
             <Button x:Name="LoginButton" Content="Log In" FontSize="24" Margin="25,50,25,0" BorderBrush="Black" Height="50"/>
             <Label Content="or" FontSize="24" Foreground="Gray" HorizontalContentAlignment="Center"/>
             <Button x:Name="RegisterButton" Content="Register" FontSize="24" Margin="25,0,25,0" BorderBrush="Black" Height="50" Background="#FF673AB7"/>

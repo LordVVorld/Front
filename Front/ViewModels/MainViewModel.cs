@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using System;
+using System.Net.Http;
 using System.Net.Http.Json;
 using System.Reactive;
 using System.Threading.Tasks;
@@ -24,12 +25,14 @@ namespace Front.ViewModels
             {
                 if (!IsValidEmail(Email))
                 {
-                    throw new Exception("Некорректно введён Email.");
+                    MessageBox.Show("Некорректно введён Email", "Внимание!");
+                    return;
                 }
 
                 if (!IsValidPassword(Password))
                 {
-                    throw new Exception("Пароль не удовлетворяет требованиям.");
+                    MessageBox.Show("Пароль не удовлетворяет требованиям", "Внимание!");
+                    return;
                 }
 
                 var loginModel = new LoginModel()
@@ -38,9 +41,19 @@ namespace Front.ViewModels
                     Password = Password! 
                 };
 
-                var response = await httpClient
-                    .PostAsJsonAsync("api/Users/login", loginModel)
-                    .ContinueWith((postTask) => postTask.Result.EnsureSuccessStatusCode());
+                var response = new HttpResponseMessage();
+
+                try
+                {
+                    response = await httpClient
+                        .PostAsJsonAsync("api/Users/login", loginModel)
+                        .ContinueWith((postTask) => postTask.Result.EnsureSuccessStatusCode());
+                }
+                catch
+                {
+                    MessageBox.Show(response.StatusCode.ToString(), "Внимание!");
+                    return;
+                }
 
                 var result = await response.Content.ReadAsStringAsync();
 

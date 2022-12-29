@@ -28,7 +28,7 @@ namespace Front.Views
                 this.Bind(
                         ViewModel,
                         viewModel => viewModel.Password,
-                        view => view.PasswordInputBox.Password
+                        view => view.PasswordInputBox.Text
                     ).DisposeWith(d);
 
                 CloseButton
